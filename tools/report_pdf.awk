@@ -6,7 +6,7 @@ FNR == 1 {
     next
 }
 
-FILENAME ~ /probe_experiment[.]csv$/ {
+FILENAME ~ /results[.]csv$/ {
     chain_count++
     chain_alpha[chain_count] = $1
     chain_items[chain_count] = $2
@@ -44,7 +44,7 @@ END {
 
     page_one = text_line("F1", 18, 48, 748, "Hash table comparison report")
     page_one = page_one text_line("F1", 11, 48, 724, "Separate chaining at load factors alpha 0.25 through 4.00")
-    page_one = page_one text_line("F1", 10, 48, 698, "Capacity 4096. Identical deterministic keys and 4096 absent-key queries per load.")
+    page_one = page_one text_line("F1", 10, 48, 698, "Capacity 4093. Random URLs; 4093 absent-key queries per load.")
     page_one = page_one text_line("F2", 9, 48, 672, "alpha    items     success measured/theory       failure measured/theory")
     for (i = 1; i <= chain_count; i++) {
         row = sprintf("%5.2f %7d      %5.3f / %5.3f              %5.3f / %5.3f", \
@@ -54,9 +54,9 @@ END {
     }
     page_one = page_one text_line("F1", 10, 48, 412, "Theory: successful lookup is 1 + alpha/2; unsuccessful lookup is alpha.")
     page_one = page_one text_line("F1", 10, 48, 392, "Measured costs stay close to theory across the full range.")
-    page_one = page_one text_line("F1", 10, 48, 374, "At alpha 4, the measured costs are 3.006 successful and 3.999 unsuccessful.")
-    page_one = page_one text_line("F1", 10, 48, 356, "Small deviations reflect finite deterministic samples and bucket distribution.")
-    page_one = page_one text_line("F1", 9, 48, 320, "The complete dataset and plot are in experiments/probe_experiment.csv and .svg.")
+    page_one = page_one text_line("F1", 10, 48, 374, "At alpha 4, the measured costs are 3.001 successful and 3.983 unsuccessful.")
+    page_one = page_one text_line("F1", 10, 48, 356, "Small deviations reflect finite samples and hash bucket distribution.")
+    page_one = page_one text_line("F1", 9, 48, 320, "The complete dataset and plot are in experiments/results.csv and .svg.")
     page_one = page_one text_line("F1", 9, 48, 300, "The comparison experiment uses the same keys and capacity for both implementations.")
 
     page_two = text_line("F1", 18, 48, 748, "Chaining versus linear probing")
