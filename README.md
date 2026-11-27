@@ -36,12 +36,15 @@
 | 테스트 | `make test` |
 | 웹 서버 (포트 8000) | `make serve` |
 | 충돌 실험 | `make experiment` |
+| PDF 보고서 | `make report` |
 | 놓친 단계 따라잡기 | `sh tools/catchup.sh <단계 번호>` |
 
 외부 라이브러리는 쓰지 않습니다. Python 표준 모듈만으로 충분합니다.
-`make experiment`는 측정 표를 `experiments/probe_experiment.csv`, 그래프를
-`experiments/probe_experiment.svg`에 생성합니다.
-`make serve`는 포트 8000에서 URL 입력 폼과 해시 테이블 확인 화면을 제공합니다.
+`make experiment`는 체이닝 표/그래프와 두 구현 비교 표/그래프를 각각
+`experiments/probe_experiment.{csv,svg}` 및
+`experiments/comparison_experiment.{csv,svg}`에 생성합니다.
+`make report`는 결과를 2쪽 이내의 `REPORT.pdf`로 정리합니다.
+`make serve`는 포트 8000에서 URL 입력 폼과 체이닝/선형 탐지 선택 및 테이블 확인 화면을 제공합니다.
 Codespaces에서 휴대폰으로 접속하려면 포트 공개 여부를 포트 패널에서 설정하세요.
 
 ## 로컬에서 하기

@@ -4,13 +4,14 @@
 #   make test        유닛 테스트 (tests/test_*.py)
 #   make serve       단축 URL 웹 서버 (포트 8000)
 #   make experiment  적재율에 따른 탐지 횟수 실험
+#   make report      실험 결과 PDF 보고서 생성
 #   make clean       캐시 정리
 #
 # 외부 라이브러리를 쓰지 않는다. Python 표준 모듈만으로 돈다.
 
 PORT ?= 8000
 
-.PHONY: all test serve experiment clean
+.PHONY: all test serve experiment report clean
 
 all: test
 
@@ -22,6 +23,10 @@ serve:
 
 experiment:
 	@python3 -m experiments.probe_experiment
+	@python3 -m experiments.comparison_experiment
+
+report: experiment
+	@awk -f tools/report_pdf.awk experiments/probe_experiment.csv experiments/comparison_experiment.csv
 
 clean:
 	rm -rf src/__pycache__ tests/__pycache__ experiments/__pycache__

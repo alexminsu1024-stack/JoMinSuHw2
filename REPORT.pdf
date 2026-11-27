@@ -1,0 +1,93 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 8 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 2647 >>
+stream
+BT /F1 18 Tf 1 0 0 1 48 748 Tm (Hash table comparison report) Tj ET
+BT /F1 11 Tf 1 0 0 1 48 724 Tm (Separate chaining at load factors alpha 0.25 through 4.00) Tj ET
+BT /F1 10 Tf 1 0 0 1 48 698 Tm (Capacity 4096. Identical deterministic keys and 4096 absent-key queries per load.) Tj ET
+BT /F2 9 Tf 1 0 0 1 48 672 Tm (alpha    items     success measured/theory       failure measured/theory) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 652 Tm ( 0.25    1024      1.126 / 1.125              0.257 / 0.250) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 638 Tm ( 0.50    2048      1.243 / 1.250              0.512 / 0.500) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 624 Tm ( 0.75    3072      1.379 / 1.375              0.763 / 0.750) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 610 Tm ( 1.00    4096      1.500 / 1.500              1.019 / 1.000) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 596 Tm ( 1.25    5120      1.627 / 1.625              1.255 / 1.250) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 582 Tm ( 1.50    6144      1.751 / 1.750              1.503 / 1.500) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 568 Tm ( 1.75    7168      1.884 / 1.875              1.759 / 1.750) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 554 Tm ( 2.00    8192      1.996 / 2.000              2.011 / 2.000) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 540 Tm ( 2.25    9216      2.122 / 2.125              2.255 / 2.250) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 526 Tm ( 2.50   10240      2.254 / 2.250              2.494 / 2.500) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 512 Tm ( 2.75   11264      2.381 / 2.375              2.750 / 2.750) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 498 Tm ( 3.00   12288      2.506 / 2.500              3.005 / 3.000) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 484 Tm ( 3.25   13312      2.626 / 2.625              3.254 / 3.250) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 470 Tm ( 3.50   14336      2.754 / 2.750              3.494 / 3.500) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 456 Tm ( 3.75   15360      2.876 / 2.875              3.753 / 3.750) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 442 Tm ( 4.00   16384      3.006 / 3.000              3.999 / 4.000) Tj ET
+BT /F1 10 Tf 1 0 0 1 48 412 Tm (Theory: successful lookup is 1 + alpha/2; unsuccessful lookup is alpha.) Tj ET
+BT /F1 10 Tf 1 0 0 1 48 392 Tm (Measured costs stay close to theory across the full range.) Tj ET
+BT /F1 10 Tf 1 0 0 1 48 374 Tm (At alpha 4, the measured costs are 3.006 successful and 3.999 unsuccessful.) Tj ET
+BT /F1 10 Tf 1 0 0 1 48 356 Tm (Small deviations reflect finite deterministic samples and bucket distribution.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 320 Tm (The complete dataset and plot are in experiments/probe_experiment.csv and .svg.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 300 Tm (The comparison experiment uses the same keys and capacity for both implementations.) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 8 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2327 >>
+stream
+BT /F1 18 Tf 1 0 0 1 48 748 Tm (Chaining versus linear probing) Tj ET
+BT /F1 11 Tf 1 0 0 1 48 724 Tm (Load factors alpha 0.1 through 0.9; both tables use the same keys.) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 694 Tm (alpha   items     chain hit   chain miss    linear hit   linear miss) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 674 Tm ( 0.1     410       1.058       0.106        1.066        1.122) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 658 Tm ( 0.2     819       1.105       0.214        1.122        1.289) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 642 Tm ( 0.3    1229       1.155       0.310        1.223        1.529) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 626 Tm ( 0.4    1638       1.208       0.409        1.358        1.978) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 610 Tm ( 0.5    2048       1.243       0.508        1.516        2.607) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 594 Tm ( 0.6    2458       1.289       0.617        1.736        3.820) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 578 Tm ( 0.7    2867       1.346       0.719        2.255        6.748) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 562 Tm ( 0.8    3277       1.403       0.820        3.285       14.061) Tj ET
+BT /F2 8 Tf 1 0 0 1 48 546 Tm ( 0.9    3686       1.455       0.913        5.496       48.670) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 518 Tm (Chaining theory: hit 1 + alpha/2; miss alpha.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 500 Tm (Linear theory: hit is 0.5 times one plus one divided by one minus alpha.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 482 Tm (Miss is 0.5 times one plus one divided by the square of one minus alpha.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 450 Tm (At alpha 0.9, linear probing averages 5.496 hits and 48.670 misses.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 432 Tm (The theoretical values are 5.500 and 50.500; the sharp rise is primary clustering.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 414 Tm (Chaining remains near its estimates: 1.455 hits and 0.913 misses at alpha 0.9.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 382 Tm (Linear probing is competitive at low load but degrades rapidly near a full table.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 364 Tm (The comparison graph and full measurements are in experiments/comparison_experiment.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 328 Tm (Method: fixed capacity 4096, seed 2026, fixed key sequences, standard-library code.) Tj ET
+BT /F1 9 Tf 1 0 0 1 48 310 Tm (Successful costs average every stored key; failed costs average 4096 absent keys.) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000002955 00000 n 
+0000003025 00000 n 
+0000003161 00000 n 
+0000005539 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+5607
+%%EOF

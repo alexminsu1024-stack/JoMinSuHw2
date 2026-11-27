@@ -10,6 +10,7 @@ class HashInspection(NamedTuple):
     nodes: tuple[tuple[str, object], ...]
     position: int
     probes: int
+    probe_indices: tuple[int, ...]
 
 
 class HashTable:
@@ -99,7 +100,14 @@ class HashTable:
             -1,
         )
         probes = position + 1 if position >= 0 else len(bucket)
-        return HashInspection(value, tuple(steps), nodes, position, probes)
+        return HashInspection(
+            value,
+            tuple(steps),
+            nodes,
+            position,
+            probes,
+            (value,) * probes,
+        )
 
     def set(self, key: str, value: object) -> None:
         self._validate_key(key)
