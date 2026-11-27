@@ -2,7 +2,7 @@
 
 from urllib.parse import urlsplit
 
-from src.base62 import encode_base62
+from src.base62 import encode
 from src.hash_table import HashInspection, HashTable
 
 
@@ -28,7 +28,7 @@ class URLShortener:
         if self._url_to_code.contains(url):
             return self._url_to_code.get(url)
 
-        code = encode_base62(self._next_id)
+        code = encode(self._next_id)
         self._next_id += 1
         self._url_to_code.set(url, code)
         self._code_to_url.set(code, url)
