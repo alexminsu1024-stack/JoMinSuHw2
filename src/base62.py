@@ -4,7 +4,7 @@ ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 BASE = len(ALPHABET)
 
 
-def encode_base62(value: int) -> str:
+def encode(value: int) -> str:
     """Encode a non-negative integer as a base62 string."""
     if not isinstance(value, int) or isinstance(value, bool):
         raise TypeError("value must be an integer")
@@ -20,7 +20,7 @@ def encode_base62(value: int) -> str:
     return "".join(reversed(encoded))
 
 
-def decode_base62(encoded: str) -> int:
+def decode(encoded: str) -> int:
     """Decode a base62 string into a non-negative integer."""
     if not isinstance(encoded, str):
         raise TypeError("encoded value must be a string")
@@ -35,3 +35,7 @@ def decode_base62(encoded: str) -> int:
             raise ValueError(f"invalid base62 character: {character!r}") from exc
         value = value * BASE + digit
     return value
+
+
+encode_base62 = encode
+decode_base62 = decode

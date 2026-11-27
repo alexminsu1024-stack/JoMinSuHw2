@@ -6,7 +6,7 @@
 
 ## 2. base62 인코딩
 
-- `src/base62.py`는 `encode_base62(value: int) -> str`와 `decode_base62(encoded: str) -> int`를 제공한다.
+- `src/base62.py`는 `encode(value: int) -> str`와 `decode(encoded: str) -> int`를 제공한다. 기존 사용처 호환을 위해 `encode_base62`와 `decode_base62` 별칭도 유지한다.
 - 숫자 알파벳 순서는 `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`다.
 - 0은 `"0"`으로 인코딩한다. 음수는 `ValueError`, 정수가 아닌 입력은 `TypeError`다. 디코더는 빈 문자열과 알파벳 밖 문자를 `ValueError`, 문자열이 아닌 입력을 `TypeError`로 거부한다.
 
