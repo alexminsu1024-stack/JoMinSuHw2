@@ -26,7 +26,7 @@ experiment:
 	@python3 -m experiments.comparison_experiment
 
 report: experiment
-	@awk -f tools/report_pdf.awk experiments/probe_experiment.csv experiments/comparison_experiment.csv
+	@awk -f tools/report_pdf.awk experiments/results.csv experiments/comparison_experiment.csv
 
 clean:
 	rm -rf src/__pycache__ tests/__pycache__ experiments/__pycache__

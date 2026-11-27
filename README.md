@@ -41,7 +41,7 @@
 
 외부 라이브러리는 쓰지 않습니다. Python 표준 모듈만으로 충분합니다.
 `make experiment`는 체이닝 표/그래프와 두 구현 비교 표/그래프를 각각
-`experiments/probe_experiment.{csv,svg}` 및
+`experiments/results.{csv,svg}` 및
 `experiments/comparison_experiment.{csv,svg}`에 생성합니다.
 `make report`는 결과를 2쪽 이내의 `REPORT.pdf`로 정리합니다.
 `make serve`는 포트 8000에서 URL 입력 폼과 체이닝/선형 탐지 선택 및 테이블 확인 화면을 제공합니다.
