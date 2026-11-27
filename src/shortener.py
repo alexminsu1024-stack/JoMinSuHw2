@@ -3,7 +3,7 @@
 from urllib.parse import urlsplit
 
 from src.base62 import encode_base62
-from src.hash_table import HashTable
+from src.hash_table import HashInspection, HashTable
 
 
 class URLShortener:
@@ -38,3 +38,9 @@ class URLShortener:
         if not self._code_to_url.contains(code):
             raise KeyError(code)
         return self._code_to_url.get(code)
+
+    def table_snapshot(self) -> tuple[tuple[tuple[str, object], ...], ...]:
+        return self._url_to_code.table_snapshot()
+
+    def inspect_url(self, url: str) -> HashInspection:
+        return self._url_to_code.inspect(url)

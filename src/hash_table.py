@@ -1,6 +1,17 @@
 """A small separate-chaining hash table for string keys."""
 
 
+from typing import NamedTuple
+
+
+class HashInspection(NamedTuple):
+    bucket_index: int
+    hash_steps: tuple[tuple[str, int, int, int], ...]
+    nodes: tuple[tuple[str, object], ...]
+    position: int
+    probes: int
+
+
 class HashTable:
     def __init__(self, capacity: int = 8, max_load_factor: float | None = 0.75):
         if not isinstance(capacity, int) or isinstance(capacity, bool) or capacity < 1:
@@ -57,6 +68,38 @@ class HashTable:
         if position < 0:
             return default, probes
         return bucket[position][1], probes
+
+    def items(self) -> list[tuple[str, object]]:
+        return [
+            (node[0], node[1])
+            for bucket in self._buckets
+            for node in bucket
+        ]
+
+    def table_snapshot(self) -> tuple[tuple[tuple[str, object], ...], ...]:
+        return tuple(
+            tuple((node[0], node[1]) for node in bucket)
+            for bucket in self._buckets
+        )
+
+    def inspect(self, key: str) -> HashInspection:
+        self._validate_key(key)
+        value = 0
+        steps = []
+        for character in key:
+            previous = value
+            raw_value = previous * 31 + ord(character)
+            value = raw_value % self.capacity
+            steps.append((character, previous, raw_value, value))
+
+        bucket = self._buckets[value]
+        nodes = tuple((node[0], node[1]) for node in bucket)
+        position = next(
+            (index for index, node in enumerate(bucket) if node[0] == key),
+            -1,
+        )
+        probes = position + 1 if position >= 0 else len(bucket)
+        return HashInspection(value, tuple(steps), nodes, position, probes)
 
     def set(self, key: str, value: object) -> None:
         self._validate_key(key)

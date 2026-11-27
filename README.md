@@ -41,6 +41,8 @@
 외부 라이브러리는 쓰지 않습니다. Python 표준 모듈만으로 충분합니다.
 `make experiment`는 측정 표를 `experiments/probe_experiment.csv`, 그래프를
 `experiments/probe_experiment.svg`에 생성합니다.
+`make serve`는 포트 8000에서 URL 입력 폼과 해시 테이블 확인 화면을 제공합니다.
+Codespaces에서 휴대폰으로 접속하려면 포트 공개 여부를 포트 패널에서 설정하세요.
 
 ## 로컬에서 하기
 

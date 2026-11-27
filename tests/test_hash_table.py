@@ -23,6 +23,18 @@ class HashTableTests(unittest.TestCase):
         self.assertEqual(table.get_with_probes("i"), (2, 1))
         self.assertEqual(table.get_with_probes("q"), (None, 2))
 
+    def test_inspection_exposes_hash_steps_and_bucket_contents(self):
+        table = HashTable()
+        table.set("a", 1)
+        table.set("i", 2)
+
+        inspection = table.inspect("i")
+
+        self.assertEqual(inspection.bucket_index, 1)
+        self.assertEqual(inspection.hash_steps, (("i", 0, 105, 1),))
+        self.assertEqual(inspection.nodes, (("i", 2), ("a", 1)))
+        self.assertEqual((inspection.position, inspection.probes), (0, 1))
+
     def test_setting_existing_key_replaces_value_without_growing(self):
         table = HashTable()
         table.set("key", 1)
