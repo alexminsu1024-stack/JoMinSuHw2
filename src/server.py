@@ -108,8 +108,9 @@ class ShortenerHandler(BaseHTTPRequestHandler):
 
         table_query = "" if table_name == "chaining" else "?table=linear"
         result = (
-            f'<p>Short code: <a href="/{escape(code)}{table_query}">'
-            f"{escape(code)}</a> ({escape(table_name)})</p>"
+            f'<p>Short link: <a href="/{escape(code)}{table_query}">'
+            f"/{escape(code)}</a></p>"
+            f"<p>Short code: <code>{escape(code)}</code> ({escape(table_name)})</p>"
             f'<p>Original URL: <a href="{escape(url, quote=True)}">'
             f"{escape(url)}</a></p>"
         )
@@ -125,34 +126,75 @@ class ShortenerHandler(BaseHTTPRequestHandler):
     def _render_table(self, table_name: str, shortener: URLShortener) -> str:
         snapshot = shortener.table_snapshot()
         rows = []
+        table_query = "" if table_name == "chaining" else "?table=linear"
         for bucket_index, bucket in enumerate(snapshot):
             if not bucket:
                 rows.append(
-                    f"<tr><td>{bucket_index}</td><td><em>empty</em></td><td></td><td></td></tr>"
+                    f'<tr><th scope="row">{bucket_index}</th>'
+                    '<td><em class="empty">Empty</em></td></tr>'
                 )
                 continue
+
+            nodes = []
             for key, value in bucket:
                 inspection = shortener.inspect_url(key)
-                probe_path = " → ".join(str(index) for index in inspection.probe_indices)
-                visited = " → ".join(escape(item_key) for item_key, _ in inspection.nodes)
-                calculations = " ; ".join(
+                calculations = "".join(
+                    "<li><code>"
                     f"{previous} × 31 + ord({escape(repr(character))}) = {raw}; "
                     f"{raw} mod {len(snapshot)} = {reduced}"
+                    "</code></li>"
                     for character, previous, raw, reduced in inspection.hash_steps
                 )
-                rows.append(
-                    f"<tr><td>{bucket_index}</td><td>{escape(key)} → "
-                    f"{escape(str(value))}</td><td>{probe_path or 'none'}"
-                    f"<br>{visited}</td>"
-                    f"<td>{calculations or 'empty key → bucket 0'}</td></tr>"
+                code = str(value)
+                short_path = f"/{code}{table_query}"
+                nodes.append(
+                    '<article class="chain-node">'
+                    '<dl>'
+                    f"<dt>URL key</dt><dd><code>{escape(key)}</code></dd>"
+                    f"<dt>Short code</dt><dd><code>{escape(code)}</code></dd>"
+                    f"<dt>Short link</dt><dd><a href=\"{escape(short_path, quote=True)}\">"
+                    f"{escape(short_path)}</a></dd>"
+                    "</dl>"
+                    "<details><summary>Horner hash calculation</summary>"
+                    f"<p>Bucket: {inspection.bucket_index}</p>"
+                    f"<ol>{calculations}</ol></details>"
+                    "</article>"
                 )
+
+            chain = '<div class="chain"><span class="chain-start">head</span>'
+            for node in nodes:
+                chain += '<span class="chain-arrow" aria-hidden="true">→</span>' + node
+            chain += (
+                '<span class="chain-arrow" aria-hidden="true">→</span>'
+                '<span class="chain-end">null</span></div>'
+            )
+            rows.append(
+                f'<tr><th scope="row">{bucket_index}</th><td>{chain}</td></tr>'
+            )
+
         return (
+            "<style>"
+            ".table-wrap{overflow-x:auto}"
+            "table{border-collapse:collapse;width:100%}"
+            "th,td{border:1px solid #9ca3af;padding:.5rem;vertical-align:top}"
+            ".chain{display:flex;align-items:center;gap:.5rem;width:max-content}"
+            ".chain-node{border:1px solid #6b7280;border-radius:.35rem;padding:.75rem;"
+            "width:18rem;overflow-wrap:anywhere}"
+            ".chain-node dl{margin:0}"
+            ".chain-node dt{font-weight:bold;margin-top:.4rem}"
+            ".chain-node dd{margin-left:0}"
+            ".chain-arrow{font-size:1.5rem}"
+            "details{margin-top:.75rem}"
+            "details code{white-space:normal}"
+            "</style>"
             f"<p>Implementation: {escape(table_name)}.</p>"
-            "<p>Horner hash: start at 0, then apply "
+            "<p>Each node shows a URL key, its short code, and a working short link. "
+            "Expand a node to see the Horner steps: "
             "<code>(value × 31 + ord(character)) mod capacity</code>.</p>"
-            "<table border=\"1\"><thead><tr><th>Bucket</th><th>Entry</th>"
-            "<th>Probe path and visited keys</th><th>Hash calculation</th></tr></thead>"
+            '<div class="table-wrap"><table><thead><tr>'
+            "<th scope=\"col\">Bucket</th><th scope=\"col\">Linked nodes</th></tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
+            "</div>"
         )
 
 
