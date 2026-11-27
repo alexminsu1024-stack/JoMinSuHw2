@@ -44,6 +44,16 @@ class HashTableTests(unittest.TestCase):
         for value in range(7):
             self.assertEqual(table.get(f"key-{value}"), value)
 
+    def test_resize_can_be_disabled_for_fixed_load_experiments(self):
+        table = HashTable(capacity=4, max_load_factor=None)
+        for value in range(9):
+            table.set(f"key-{value}", value)
+
+        self.assertEqual(table.capacity, 4)
+        self.assertEqual(len(table), 9)
+        for value in range(9):
+            self.assertEqual(table.get(f"key-{value}"), value)
+
     def test_keys_must_be_strings(self):
         table = HashTable()
         with self.assertRaises(TypeError):

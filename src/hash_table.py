@@ -2,11 +2,18 @@
 
 
 class HashTable:
-    def __init__(self, capacity: int = 8):
+    def __init__(self, capacity: int = 8, max_load_factor: float | None = 0.75):
         if not isinstance(capacity, int) or isinstance(capacity, bool) or capacity < 1:
             raise ValueError("capacity must be a positive integer")
+        if max_load_factor is not None and (
+            not isinstance(max_load_factor, (int, float))
+            or isinstance(max_load_factor, bool)
+            or max_load_factor <= 0
+        ):
+            raise ValueError("max_load_factor must be positive or None")
         self._buckets = [[] for _ in range(capacity)]
         self._size = 0
+        self._max_load_factor = max_load_factor
 
     @property
     def capacity(self) -> int:
@@ -58,7 +65,10 @@ class HashTable:
             bucket[position][1] = value
             return
 
-        if (self._size + 1) / self.capacity > 0.75:
+        if (
+            self._max_load_factor is not None
+            and (self._size + 1) / self.capacity > self._max_load_factor
+        ):
             self._resize(self.capacity * 2)
 
         bucket = self._buckets[self._index(key, self.capacity)]

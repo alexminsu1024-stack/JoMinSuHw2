@@ -39,6 +39,8 @@
 | 놓친 단계 따라잡기 | `sh tools/catchup.sh <단계 번호>` |
 
 외부 라이브러리는 쓰지 않습니다. Python 표준 모듈만으로 충분합니다.
+`make experiment`는 측정 표를 `experiments/probe_experiment.csv`, 그래프를
+`experiments/probe_experiment.svg`에 생성합니다.
 
 ## 로컬에서 하기
 
