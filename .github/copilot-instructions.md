@@ -8,3 +8,9 @@
 - Add or update tests before implementing behavior. Do not weaken tests to make an implementation pass.
 - Use only the Python standard library and run `make test` after behavior changes.
 - Keep server behavior aligned with `SPEC.md`; do not change port visibility or network exposure as part of application code.
+
+## Git workflow
+
+- For each issue, branch from `develop` using `feature/<issue-number>-<short-name>`.
+- Post progress updates as comments on the issue.
+- When the work is complete, commit the changes, merge the feature branch into `develop`, push the updated branch, and close the issue.
