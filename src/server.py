@@ -124,6 +124,9 @@ class ShortenerHandler(BaseHTTPRequestHandler):
         return None
 
     def _render_table(self, table_name: str, shortener: URLShortener) -> str:
+        if table_name == "linear":
+            return self._render_linear_table(shortener)
+
         snapshot = shortener.table_snapshot()
         rows = []
         table_query = "" if table_name == "chaining" else "?table=linear"
@@ -193,6 +196,72 @@ class ShortenerHandler(BaseHTTPRequestHandler):
             "<code>(value × 31 + ord(character)) mod capacity</code>.</p>"
             '<div class="table-wrap"><table><thead><tr>'
             "<th scope=\"col\">Bucket</th><th scope=\"col\">Linked nodes</th></tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>"
+            "</div>"
+        )
+
+    def _render_linear_table(self, shortener: URLShortener) -> str:
+        snapshot = shortener.table_snapshot()
+        rows = []
+        for index, slot in enumerate(snapshot):
+            if not slot:
+                rows.append(
+                    f'<tr><th scope="row">{index}</th>'
+                    '<td><em class="empty">Empty</em></td></tr>'
+                )
+                continue
+
+            key, value = slot[0]
+            inspection = shortener.inspect_url(key)
+            calculations = "".join(
+                "<li><code>"
+                f"{previous} × 31 + ord({escape(repr(character))}) = {raw}; "
+                f"{raw} mod {len(snapshot)} = {reduced}"
+                "</code></li>"
+                for character, previous, raw, reduced in inspection.hash_steps
+            )
+            code = str(value)
+            short_path = f"/{code}?table=linear"
+            probe_path = " → ".join(
+                str(probe_index) for probe_index in inspection.probe_indices
+            )
+            slot_content = (
+                '<article class="array-slot"><dl>'
+                "<dt>Status</dt><dd>Occupied</dd>"
+                f"<dt>URL</dt><dd><code>{escape(key)}</code></dd>"
+                f"<dt>Short code</dt><dd><code>{escape(code)}</code></dd>"
+                f"<dt>Short link</dt><dd><a href=\"{escape(short_path, quote=True)}\">"
+                f"{escape(short_path)}</a></dd>"
+                f"<dt>Initial hash index</dt><dd>{inspection.bucket_index}</dd>"
+                f"<dt>Stored at</dt><dd>{inspection.position}</dd>"
+                f"<dt>Probe path</dt><dd>{escape(probe_path)}</dd>"
+                f"<dt>Probe count</dt><dd>{inspection.probes}</dd>"
+                "</dl><details><summary>Horner hash calculation</summary>"
+                f"<ol>{calculations}</ol></details></article>"
+            )
+            rows.append(
+                f'<tr><th scope="row">{index}</th><td>{slot_content}</td></tr>'
+            )
+
+        return (
+            "<style>"
+            ".table-wrap{overflow-x:auto}"
+            "table{border-collapse:collapse;width:100%}"
+            "th,td{border:1px solid #9ca3af;padding:.5rem;vertical-align:top}"
+            ".array-slot{border:1px solid #6b7280;border-radius:.35rem;padding:.75rem;"
+            "overflow-wrap:anywhere}"
+            ".array-slot dl{margin:0}"
+            ".array-slot dt{font-weight:bold;margin-top:.4rem}"
+            ".array-slot dd{margin-left:0}"
+            ".array-slot details{margin-top:.75rem}"
+            ".array-slot details code{white-space:normal}"
+            "</style>"
+            "<p>Implementation: linear probing.</p>"
+            "<p>Each array slot shows its index and whether it is empty or contains a URL. "
+            "Occupied slots include the initial hash index, stored index, probe path and "
+            "probe count. Expand a slot to see the Horner hash calculation.</p>"
+            '<div class="table-wrap"><table><thead><tr>'
+            "<th scope=\"col\">Index</th><th scope=\"col\">Linear probing slots</th></tr></thead>"
             f"<tbody>{''.join(rows)}</tbody></table>"
             "</div>"
         )

@@ -5,6 +5,7 @@ from threading import Thread
 from urllib.parse import urlencode
 
 from src.hash_table import HashTable
+from src.linear_probing import LinearProbingHashTable
 from src.server import ShortenerHandler
 from src.shortener import URLShortener
 
@@ -97,6 +98,46 @@ class ShortenerServerTests(unittest.TestCase):
         self.assertEqual(table_page.count("<details>"), 2)
         self.assertIn("Horner hash calculation", table_page)
         self.assertIn("ord(", table_page)
+
+    def test_linear_table_shows_array_slots_and_wraparound_probe_path(self):
+        shortener = URLShortener(LinearProbingHashTable)
+        ShortenerHandler.shorteners = (("linear", shortener),)
+        urls = []
+        for index in range(100):
+            candidate = f"https://example.com/linear-{index}"
+            if HashTable._index(candidate, 8) == 7:
+                urls.append(candidate)
+            if len(urls) == 2:
+                break
+
+        self.assertEqual(len(urls), 2)
+        for url in urls:
+            body = urlencode((("url", url), ("table", "linear"))).encode("utf-8")
+            status, _, _ = self._request("POST", "/shorten", body)
+            self.assertEqual(status, 200)
+
+        status, _, table_page = self._request("GET", "/table?table=linear")
+
+        self.assertEqual(status, 200)
+        self.assertIn("Linear probing slots", table_page)
+        self.assertIn("Index", table_page)
+        self.assertEqual(table_page.count('<th scope="row">'), 8)
+        self.assertIn(urls[0], table_page)
+        self.assertIn(urls[1], table_page)
+        self.assertIn("<dt>Status</dt><dd>Occupied</dd>", table_page)
+        self.assertIn("Short code", table_page)
+        self.assertIn('href="/0?table=linear"', table_page)
+        self.assertIn('href="/1?table=linear"', table_page)
+        self.assertIn("Initial hash index</dt><dd>7</dd>", table_page)
+        self.assertIn("Stored at</dt><dd>7</dd>", table_page)
+        self.assertIn("Stored at</dt><dd>0</dd>", table_page)
+        self.assertIn("Probe path</dt><dd>7 → 0</dd>", table_page)
+        self.assertIn("Probe count</dt><dd>2</dd>", table_page)
+        self.assertIn("Empty", table_page)
+        self.assertIn("Horner hash calculation", table_page)
+        self.assertIn("ord(", table_page)
+        self.assertNotIn("chain-start", table_page)
+        self.assertNotIn("chain-end", table_page)
 
 
 if __name__ == "__main__":
